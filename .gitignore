@@ -1,0 +1,31 @@
+# ===== 签名密钥（绝不能提交）=====
+*.keystore
+*.jks
+*.pem
+
+# ===== 构建产物 =====
+build/
+apk/classes/
+apk/dex/
+apk/base.apk
+apk/aligned.apk
+*.apk
+*.apk.idsig
+*.dex
+*.class
+
+# ===== 生成的大型资源（语音/预览/截图）=====
+apk/assets/audio/*.mp3
+preview_*.html
+*.log
+legacy_audio/
+# 注意：apk/assets/images/ 下的 PNG 是图形题素材，必须保留，不在此排除。
+
+# ===== 本地状态与缓存 =====
+state.json
+__pycache__/
+*.pyc
+
+# ===== 编辑器/系统 =====
+.DS_Store
+Thumbs.db

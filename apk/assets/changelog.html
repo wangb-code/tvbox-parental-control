@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f6f8fb">
+<title>版本更新记录 · 极光盒子家长控制</title>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--txt:#1c2634;--muted:#6b7789;--blue:#2563eb;--blue-l:#eaf1ff;--green:#16794a;--green-l:#e6f6ed;--amber:#b45309;--amber-l:#fff5e0;--red:#b42318;--red-l:#fdecea}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;padding:14px 14px 40px;max-width:560px;margin:auto}
+header{margin:4px 2px 14px}
+h1{font-size:20px;font-weight:600;margin:0}
+.sub{font-size:12px;color:var(--muted);margin-top:3px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:5px}
+.dot.on{background:var(--green)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:#eef2f8;border:1px solid var(--line);border-radius:12px;padding:4px;margin:0 0 14px;position:relative;z-index:3}
+.tabs a{display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--muted);font-size:12.5px;font-weight:600;padding:11px 1px;border-radius:9px;touch-action:manipulation;-webkit-user-select:none;user-select:none;white-space:nowrap}
+.tabs a.on{background:#fff;color:var(--blue);box-shadow:0 1px 3px rgba(20,40,80,.10)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.ver{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ver b{font-size:17px;color:var(--blue)}
+.date{font-size:12px;color:var(--muted)}
+.pill{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;background:#eef2f8;color:var(--muted)}
+.pill.now{background:var(--green-l);color:var(--green)}
+ul{margin:6px 0 0;padding-left:20px}
+li{margin:5px 0;font-size:14px}
+li b{font-weight:600}
+.tiny{font-size:12px;color:var(--muted);line-height:1.7}
+.hr{height:1px;background:var(--line);margin:14px 0}
+.back{display:block;text-align:center;text-decoration:none;background:var(--blue);color:#fff;border-radius:10px;padding:14px;font-size:15px;font-weight:600;margin:16px 0 0}
+</style>
+</head>
+<body>
+<header style="display:flex;align-items:center;justify-content:space-between">
+  <div><h1>版本更新记录</h1><div class="sub">点控制台版本号打开本页 <span id="ver" style="color:var(--green)"></span></div></div>
+  <div style="text-align:right"><div><span class="dot on" id="dot"></span><span id="conn" style="font-size:12px">连接中</span></div><div class="sub" id="clock">--:--</div></div>
+</header>
+
+<nav class="tabs">
+  <a href="/?tab=control">控制台</a>
+  <a href="/?tab=remote">遥控器</a>
+  <a href="/bank">题库 · 错题</a>
+  <a href="/?tab=settings">设置</a>
+</nav>
+
+<div class="card">
+  <div class="ver"><b>v7.13</b><span class="date">2026-11-22</span><span class="pill now">当前版本</span></div>
+  <ul>
+    <li>英文题彻底去掉拼音，避免拼音和英文都是拉丁字母混淆孩子：题干改用中文（如「斑马」的英文是？），选项用中文汉字（如 风筝/兔子）。</li>
+    <li>语音新增题干朗读：先读题目要求（如「单词 kite 是什么意思呢」「斑马的英文单词是哪一个呢」），再逐读选项。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.12</b><span class="date">2026-11-22</span></div>
+  <ul>
+    <li>英文题改为适合只认拼音的孩子：选项由中文释义改为带声调拼音（如风筝→fēngzheng、兔子→tùzi），孩子听中文发音、对照拼音选项作答。</li>
+    <li>「看拼音选英文」题的题干中文词也改为拼音（如「苹果」→「píngguǒ」）。</li>
+    <li>语音保持不变：读中文提示语与中文词发音，不读拼音字母音，避免误导。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.11</b><span class="date">2026-11-22</span></div>
+  <ul>
+    <li>错题惩罚调整：由「连续 5 题未答对」改为「本轮累计答错 3 次」触发，中途答对不再清零，答对 2 题解锁后重新开始累计。</li>
+    <li>惩罚时长改为逐次加 1 分钟（第 1 次 1 分钟、第 2 次 2 分钟……不封顶）。</li>
+    <li>保留同一题答错 2 次换题的机制。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.10</b><span class="date">2026-11-22</span></div>
+  <ul>
+    <li>语文拼音题的选项汉字改为一年级常用字（如 马、虎、鱼、猪、笔、米），去掉偏难字。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.9</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>看图题选项改为纯英文单词（如 star / ball / cat），去掉中文。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.8</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>英语题改为词义题：「apple 是什么意思」选中文、「苹果的英文是」选单词；语音只读选项，不读题干单词。</li>
+    <li>图形题改为看图选「英文+中文」（如 apple 苹果），强化单词与词义对应。</li>
+    <li>语文、数学题型不变；全部语音按新题型重新生成。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.7</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>语文题调整为：题目显示带声调拼音（如 dǎ），四个选项为中文汉字，选读音对应的字。</li>
+    <li>英语题聚焦 A–Z 字母及其代表的简单单词，字母统一用小写 a–z 显示。</li>
+    <li>全部语音按新题型重新生成。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.6</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>题库升级为 150 题：语文拼音 60、英语 50、数学 24、图形 16。</li>
+    <li>拼音题改为声母 + 单韵母拼读，含「听发音选声调」与「看拼读写读音」两种，全部带四声标注。</li>
+    <li>英语题改为 A–Z 首字母自然拼读（看字母选单词 / 听单词选首字母）。</li>
+    <li>拼音发音改用标准音节读音（同音字驱动），不再读成字母音；全部 618 条语音已重新生成。</li>
+    <li>已清空历史答题与错题记录，从头开始统计。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.5</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>修复「找遥控器」有时不响的问题：触发前自动复位创维系统的响铃标志，确保每次点击都能让遥控器响 10 秒。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.4</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>控制台「盒子状态」在网络下方新增实时内存显示：可用 / 总量、使用率进度条与交换空间，低于 20% 变橙、低于 10% 变红，每 2 秒随状态刷新。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.3</b><span class="date">2026-11-21</span></div>
+  <ul>
+    <li>新增系统闹钟看门狗：即使服务被盒子低内存机制杀掉，也在约 20 秒内重新拉起，缩短网页访问中断时间。</li>
+    <li>原有保活 Job 的重启窗口由 60–120 秒缩短到 30–60 秒，与新看门狗互为备份。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.2</b><span class="date">2026-11-19</span></div>
+  <ul>
+    <li>题库「全部启用 / 全部停用」按钮按当前设置高亮：全启用时前者变绿，全停用时后者变红，部分启用保持普通。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.1</b><span class="date">2026-11-19</span></div>
+  <ul>
+    <li>「解锁电视」改为按状态处理：手动锁只解除手动锁；休息锁结束本次休息；惩罚锁清除惩罚并重新出题；今日上限放行一次本轮。</li>
+    <li>放行不再整天豁免今日上限，本轮结束进入休息时自动恢复约束；放行后无锁可解，重复点击不会累加时间。</li>
+    <li>无任何锁定时按钮置灰禁用，接口也不产生状态变化；说明文字随状态显示对应动作。</li>
+    <li>播放按键改为串行执行，避免快速「锁定→解锁」时两次媒体键乱序把播放留在暂停态。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v7.0</b><span class="date">2026-11-17</span></div>
+  <ul>
+    <li>本轮最后一次答题时，题目语音前先播报「还有 X 分钟就到时间啦」；换题不重复播报。</li>
+    <li>修复「拼一拼：x + i」把 x 读成英文字母名，改为中文「西」，5 条语音重新合成。</li>
+    <li>真机验证答题结束后的播放链路：暂停 → 答题音量调高 → 恢复播放 → 音量还原，均正常。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.9</b><span class="date">2026-11-15</span></div>
+  <ul>
+    <li>去掉「题库」页签上的红色数字角标；错题数量改在题库页「错题」分段内显示。</li>
+    <li>控制台不再为角标每 15 秒请求一次错题库，减少页面请求。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.8</b><span class="date">2026-11-15</span></div>
+  <ul>
+    <li><b>修复设置页显示默认值</b>：控制台渲染仍引用已删除的元素，异常导致所有设置回填未执行，页面一直显示 HTML 默认值；现改为先回填设置，并移除失效引用。</li>
+    <li>正在编辑、尚未保存的输入与开关不再被 2 秒轮询覆盖；保存成功后自动解除保护。</li>
+    <li>桌面预览改为内联连接脚本并直连盒子接口，预览中的设置项也显示盒子真实值；渲染异常不再被静默吞掉。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.7</b><span class="date">2026-11-15</span></div>
+  <ul>
+    <li><b>答题界面显示剩余时间</b>：出题画面底部显示「本轮还可看 X 分 / 今日还可看 Y 分」两行，数据来自盒子计时状态。</li>
+    <li><b>修复每日上限可被绕过</b>：达到上限后建立持久化锁定状态，倒计时结束或跨天不再自动放行，需家长点「解锁电视」；另可按设置页「每日上限恢复时间」（默认 06:00）自动恢复。</li>
+    <li><b>拼音拼读题选项改为汉字</b>：b + a 这类题的四个选项由拼音改为语音里已念的简单汉字（波 / 拉 / 发 / 八 等），屏幕与朗读一致，无需重录语音。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.6</b><span class="date">2026-11-14</span></div>
+  <ul>
+    <li><b>锁定界面显示最近 7 天天气</b>：锁屏下方新增 7 张天气卡片，显示今天起一周的日期、天气、最高 / 最低温与风力，今天高亮；顶部显示城市、当前温度与空气质量。</li>
+    <li><b>锁定界面倒计时</b>：休息、惩罚、每日上限时显示秒级递减的剩余时间，标签分别为「休息时间还剩 / 惩罚剩余时间 / 距离明天恢复」；手动锁定显示「等待家长解锁」。锁定标题与提示改为固定高度，不再被天气和倒计时挤压裁切。</li>
+    <li>天气使用国内中文预报源，无需账号或密钥；盒子每 30 分钟自动更新一次，联网失败时显示上次缓存并标注。设置页可选城市、关闭天气、手动刷新或预览锁定界面。</li>
+    <li><b>修复正确率显示 <code>undefined%</code></b>：题库接口补齐汇总正确率，前端对缺失或无效值统一按 0% 显示；没答过的题正确率为 0%，不再是 -1%。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.5</b><span class="date">2026-11-14</span></div>
+  <ul>
+    <li><b>定时重启按周几</b>：设置页可勾选周一至周日任意几天并指定时间，默认仅周日 01:00，不再每天重启。</li>
+    <li><b>题库与错题本合并</b>：页签精简为四个，题库页用「全部 / 错题 / 没做过 / 已停用」分段切换，共用统计、科目筛选、搜索与排序；错题视图显示答错次数与常错选项，可一键清空答题记录。旧 <code>/wrongbook</code> 书签自动跳到合并页。</li>
+    <li><b>每次答 2 题</b>：到点后累计答对 2 题才继续观看；防瞎猜与 1 / 3 / 5 分钟惩罚规则不变，中途答错按原规则换题、已答对题数保留。</li>
+    <li><b>抽题优先调整</b>：没答过的题权重 7、常错题最高 25、已经做熟的题降到 1；「完全随机」模式仍可选。</li>
+    <li><b>选项每次随机</b>：每题预录 4 套选项排列及配套语音，出题随机选一套，屏幕与朗读始终一致；每次出题的题目、选项顺序、正确答案位置都会变化。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.4</b><span class="date">2026-11-11</span></div>
+  <ul>
+    <li>四个页面的连接状态统一：共用 <code>/common.js</code>，只轮询轻量的 <code>/api/status</code>（2 秒一次），不再由题库、错题本的大数据接口决定。</li>
+    <li>修复手机浏览器上题库页报「服务未响应」而控制台显示「已连接」的状态不一致；业务数据加载失败不再影响连接状态。</li>
+    <li>版本号、时钟、状态圆点由同一处写入；版本记录页补齐连接指示；断连时统一提示「未连接 · 检查 Wi-Fi」。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.3</b><span class="date">2026-11-11</span></div>
+  <ul>
+    <li>四个页面的页签统一为「设置」。</li>
+    <li>精简全部操作说明，只保留按钮功能；抽题规则说明压缩为一句话。</li>
+    <li>修复本地预览的连接状态误报：预览文件改为直连盒子接口。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.2</b><span class="date">2026-11-11</span></div>
+  <ul>
+    <li><b>快捷操作移到控制台</b>：「立即出一道题」「重置本轮计时」「跳过当前题目」三个按钮从设置挪到控制台。</li>
+    <li><b>出题类型移入题库</b>：数学 / 英语 / 语文 / 图形四个开关改在「题库」页即时保存，设置页不再重复出现。</li>
+    <li><b>新增「语文」类型</b>：原来的拼音、拼读、声调识字题归入语文，题目与语音不变。</li>
+    <li><b>抽题规则可查看、可切换</b>：题库页说明「错题优先」的加权算法（净错次 × 4，新题权重 1，最近 12 道不重复），并解释大量题还没答过是加权随机的正常结果；可一键改为「完全随机」。</li>
+    <li><b>数学题全部换新</b>：24 道改为 20 以内加减法，含「10 以内三数连加」；删除「数一数，有几个圆点？」「哪个数字更大？」等题；正确答案在 A / B / C / D 各 6 道、位置随机打散，防止背答案。</li>
+    <li><b>语音重做与全量校验</b>：新数学题逐条重新合成，题干数字、四个选项与朗读文本自动比对；71 道题 + 7 条提示音共 78 条全部通过指纹校验。</li>
+    <li><b>净化无用内容</b>：删除已停用的遥控器说明、答题提示、超时、锁定四条语音；移除未再使用的备用答题界面与访问令牌残留；盒子启动时自动清掉旧语音文件。</li>
+    <li>错题本改为显示题库里的当前题目，题库换题后不会再出现已删除的旧题面；旧的答题次数继续保留。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.1</b><span class="date">2026-11-11</span></div>
+  <ul>
+    <li><b>新增「题库」页签</b>：列出全部 71 道题，含从没做过的题，可查看每道题的答题次数、答对次数、答错次数和正确率。</li>
+    <li><b>逐题勾选是否出题</b>：太简单、经常答对的题可取消勾选，之后不再被抽到；开关保存在盒子里，重启、断电、升级都不会丢。</li>
+    <li><b>批量管理</b>：按科目 / 启用状态 / 关键词 / 错得多不多筛选后批量启停，另有「全部启用」「全部停用」「停用常对的题」（答过 3 次以上且从没错过）一键操作。</li>
+    <li><b>抽题安全兜底</b>：若把题目全部停用，系统仍会照常随机出题，避免到点无题可答卡住电视；页面会给出提示。</li>
+    <li>答题记录与启用状态分开保存：清空错题本只归零次数，不会改回勾选。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v6.0</b><span class="date">2026-11-11</span></div>
+  <ul>
+    <li><b>状态同步</b>：观看状态与盒子状态确认来自同一次状态响应，播放、计时、状态徽章统一口径，不再出现一处"未播放"另一处"正在播放"。</li>
+    <li><b>移除「正在看」</b>：前台应用名判断不够准确，已去掉显示及后台探测，减少盒子开销。</li>
+    <li><b>网络流量</b>：新增实时上行/下行速率，以及开机以来累计接收/发送流量；设备不支持时自动隐藏。</li>
+    <li><b>本页上线</b>：点控制台右上角版本号即可查看历次升级内容。</li>
+    <li><b>错题优先出题</b>：按"净错次 = 答错 − 答对"加权抽题，错得多的题更常出现；手机端会标出"错题复习"。</li>
+    <li><b>答题更直接</b>：去掉"如何用遥控器答题"的语音和界面说明，出题后直接读题；题干字号加大。</li>
+    <li><b>答题音量</b>：出题时自动把音量提到上限的 80%（如 10/15 提到 12/15），答题结束恢复原音量。</li>
+    <li><b>界面精简</b>：设置底部的长篇规则说明移除。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.9</b><span class="date">2026-11-07</span></div>
+  <ul>
+    <li>修复四个页签在手机上点不上的问题：改用按钮 + 事件委托，增加触摸优化。</li>
+    <li>跨页面返回页签改走 <code>?tab=</code> 参数，兼容手机 App 内置浏览器。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.8</b><span class="date">2026-11-07</span></div>
+  <ul>
+    <li>控制台新增「盒子状态」：正在看 / 播放 / 音量（含音量条与加减按钮）/ 网络与 IP。</li>
+    <li>控制台不再显示错题本卡片，错题本统一从页签进入。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.7</b><span class="date">2026-11-07</span></div>
+  <ul>
+    <li>拆成四个页签：控制台、遥控器、错题本、设置。</li>
+    <li>到点出题时自动跳回控制台页签；页签位置可记住。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.6</b><span class="date">2026-11-07</span></div>
+  <ul>
+    <li>错题本独立成网页 <code>/wrongbook</code>，与控制台用页签互切。</li>
+    <li>可按科目筛选、按"错得最多 / 最近答错"排序，显示正确答案与常错选项。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.5</b><span class="date">2026-11-07</span></div>
+  <ul>
+    <li>新增错题库：记录每次答对/答错、总正确率、分科目正确率、最常错的题。</li>
+    <li>图形题显示物品缩略图，记录"他常错选成什么"，支持一键清空。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.4 系列</b><span class="date">2026-11-07</span></div>
+  <ul>
+    <li>图形题改为「看物品图案 · 选英文单词」，共 16 个物品；默认出题间隔由 10 分钟改为 5 分钟。</li>
+    <li>访问令牌功能加入后又按需求整体移除，恢复局域网免密。</li>
+    <li>「无播放不计时」与家长手动「暂停计时」；出题后 1 分钟无人应答自动静音并停止计时，按遥控器即恢复。</li>
+    <li>修复清理应用数据后自启链断裂：改为直接拉起前台服务并重建持久化看门狗任务。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>v5.3</b><span class="date">基础整合版</span></div>
+  <ul>
+    <li>答题界面：选项前加带点的彩色编号、图形题配彩色图案，修正颜色透明导致的显示缺失。</li>
+    <li>答题时暂停/静音播放，遥控器方向键答题，题目与选项中文语音朗读。</li>
+    <li>防瞎猜：选错 2 次换题，连续 5 题未答对惩罚锁定 1 / 3 / 5 分钟。</li>
+    <li>免密控制、绿色解锁按钮、找遥控器置顶、电源/重启置顶、锁定语音说明原因。</li>
+    <li>单次 / 休息 / 每日累计时长可设置，开关机不重置；每日 01:00 定时重启与开机自启。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="ver"><b>搭建阶段</b><span class="date">v5.3 之前</span></div>
+  <ul>
+    <li>ADB 连接盒子、精简系统应用与清理缓存、提升运行速度，并保留应用备份与回滚脚本。</li>
+    <li>控制逻辑从电脑上的 Python 服务迁移为盒子原生 APK，开机自启、不依赖电脑。</li>
+  </ul>
+  <div class="hr"></div>
+  <div class="tiny">v5.3 之前未单独编号；v5.4 系列为同日多次调整合并。</div>
+</div>
+
+<a class="back" href="/?tab=control">返回控制台</a>
+<script src="/common.js"></script>
+<script>TVCTL.init();</script>
+</body>
+</html>

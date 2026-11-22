@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f6f8fb">
+<title>题库 · 极光盒子 家长控制</title>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--txt:#1c2634;--muted:#6b7789;--blue:#2563eb;--blue-l:#eaf1ff;--amber:#b45309;--amber-l:#fff5e0;--green:#16794a;--green-l:#e6f6ed;--red:#b42318;--red-l:#fdecea}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;padding:14px 14px 46px;max-width:560px;margin:auto}
+header{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 12px}
+h1{font-size:19px;font-weight:600;margin:0}
+.sub{font-size:12px;color:var(--muted);margin-top:2px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:5px}
+.dot.on{background:var(--green)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:#eef2f8;border:1px solid var(--line);border-radius:12px;padding:4px;margin:0 0 14px;position:relative;z-index:3}
+.tabs a{display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--muted);font-size:12.5px;font-weight:600;padding:11px 1px;border-radius:9px;touch-action:manipulation;-webkit-user-select:none;user-select:none;white-space:nowrap}
+.tabs a.on{background:#fff;color:var(--blue);box-shadow:0 1px 3px rgba(20,40,80,.10)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{font-size:14px;font-weight:600;margin:0 0 12px;color:var(--muted);letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--blue-l);border-radius:10px;padding:10px 6px;text-align:center}
+.stat .k{font-size:11px;color:var(--muted)}
+.stat .v{font-size:19px;font-weight:600;color:var(--blue);margin-top:2px;line-height:1.25}
+.stat .v small{font-size:11px;font-weight:400}
+.stat.r{background:var(--red-l)}.stat.r .v{color:var(--red)}
+.stat.g{background:var(--green-l)}.stat.g .v{color:var(--green)}
+.stat.a{background:var(--amber-l)}.stat.a .v{color:var(--amber)}
+.enablebar{height:9px;background:#e9eef6;border-radius:6px;overflow:hidden;margin:14px 0 6px}
+.enablebar i{display:block;height:100%;background:var(--green);border-radius:6px;transition:width .25s}
+.enablebar i.low{background:var(--red)}
+.tiny{font-size:12px;color:var(--muted);line-height:1.65}
+.warnbox{background:var(--amber-l);color:var(--amber);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.6;margin-top:12px}
+.types{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.types label{display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;padding:12px 2px;border:1px solid var(--line);border-radius:10px;background:#fbfcfe;cursor:pointer;touch-action:manipulation}
+.types label.on{background:var(--green-l);border-color:#bfe4cf;color:var(--green)}
+.types input{width:17px;height:17px;accent-color:var(--green);margin:0}
+.rulebox{background:var(--blue-l);border-radius:10px;padding:11px 12px;font-size:12.5px;line-height:1.7;color:#24436e;margin-top:10px}
+.rulebox b{color:var(--blue)}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#eef2f8;border:1px solid var(--line);border-radius:10px;padding:4px}
+.seg2 button{font:inherit;font-size:13px;padding:10px 4px;border:0;background:transparent;color:var(--muted);border-radius:7px;cursor:pointer;touch-action:manipulation}
+.seg2 button.on{background:#fff;color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(20,40,80,.10)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px}
+.chips button{font:inherit;font-size:13px;padding:7px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer;touch-action:manipulation}
+.chips button.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.chips button b{font-weight:600;margin-left:4px;opacity:.85}
+.chips.soft button{font-size:12.5px;padding:6px 10px}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.row input{flex:1;min-width:0;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fbfcfe;color:var(--txt);outline:none}
+.row input:focus{border-color:var(--blue)}
+.row select{font:inherit;font-size:13px;padding:10px 6px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--txt)}
+.qi{display:flex;gap:11px;align-items:flex-start;padding:13px 0;border-bottom:1px dashed var(--line)}
+.qi:last-child{border-bottom:0}
+.qi.off{opacity:.62}
+.sw{flex:0 0 50px;text-align:center;padding-top:2px}
+.sw label{display:inline-block;position:relative;width:46px;height:27px;cursor:pointer;touch-action:manipulation}
+.sw input{position:absolute;opacity:0;width:0;height:0}
+.sw i{position:absolute;inset:0;background:#cbd5e1;border-radius:20px;transition:.2s}
+.sw i:after{content:"";position:absolute;left:3px;top:3px;width:21px;height:21px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:.2s}
+.sw input:checked+i{background:var(--green)}
+.sw input:checked+i:after{transform:translateX(19px)}
+.sw span{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
+.qb{flex:1;min-width:0}
+.qt{font-size:15px;font-weight:600;word-break:break-word;line-height:1.4}
+.qt .num{font-size:11px;font-weight:500;color:var(--muted);margin-right:5px}
+.tag{display:inline-block;background:#f2f5fa;border-radius:5px;padding:0 5px;margin-right:6px;color:var(--muted);font-size:11.5px;font-weight:500}
+.opts{font-size:12.5px;color:var(--muted);margin-top:4px;word-break:break-word;line-height:1.55}
+.opts b{color:var(--green)}
+.mm{font-size:12.5px;margin-top:5px;line-height:1.6}
+.mm .ok{color:var(--green);font-weight:600}
+.mm .bad{color:var(--red);font-weight:600}
+.mm .na{color:var(--muted)}
+.pill{padding:3px 9px;border-radius:20px;font-size:12px;font-weight:500;background:var(--green-l);color:var(--green)}
+.pill.red{background:var(--red-l);color:var(--red)}
+.pill.gray{background:#eef2f8;color:var(--muted)}
+.th{width:44px;height:44px;object-fit:contain;vertical-align:middle;border-radius:6px;background:#fafbfe;margin-right:6px}
+.empty{font-size:13.5px;color:var(--muted);padding:18px 0;text-align:center;line-height:1.8}
+button.act{font:inherit;font-size:13px;color:var(--txt);background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 6px;cursor:pointer;touch-action:manipulation}
+button.act:active{transform:scale(.97)}
+button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.danger{background:var(--red-l);color:var(--red);border-color:#f6cfc9}
+button.act.on-all{background:var(--green);color:#fff;border-color:var(--green)}
+button.act.off-all{background:var(--red);color:#fff;border-color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hr{height:1px;background:var(--line);margin:14px 0}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(80px);background:#1c2634;color:#fff;padding:11px 20px;border-radius:24px;font-size:14px;opacity:0;transition:.25s;z-index:9;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.stats6{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg4{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:#eef2f8;border:1px solid var(--line);border-radius:10px;padding:4px;margin-bottom:10px}
+.seg4 button{font:inherit;font-size:12.5px;padding:8px 2px;border:0;background:transparent;color:var(--muted);border-radius:7px;cursor:pointer;touch-action:manipulation}
+.seg4 button.on{background:#fff;color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(20,40,80,.10)}
+.seg4 button b{font-weight:600;margin-left:3px;font-size:11px;opacity:.8}
+.mm s{color:var(--red);text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>题库</h1><div class="sub">答题次数 · 错题次数 · 是否出题 <span id="ver" style="color:var(--green)"></span></div></div>
+  <div style="text-align:right"><div><span class="dot" id="dot"></span><span id="conn" style="font-size:12px">连接中</span></div><div class="sub" id="clock">--:--</div></div>
+</header>
+
+<nav class="tabs">
+  <a href="/?tab=control">控制台</a>
+  <a href="/?tab=remote">遥控器</a>
+  <a class="on" href="/bank">题库 · 错题</a>
+  <a href="/?tab=settings">设置</a>
+</nav>
+
+<div class="card">
+  <h2>题库概况 <span class="pill" id="poolPill">--</span></h2>
+  <div class="stats6">
+    <div class="stat"><div class="k">总题数</div><div class="v" id="sTotal">0</div></div>
+    <div class="stat g"><div class="k">参与抽题</div><div class="v" id="sOn">0</div></div>
+    <div class="stat a"><div class="k">累计答题</div><div class="v" id="sAsked">0</div></div>
+    <div class="stat"><div class="k">答对</div><div class="v" id="sOk">0</div></div>
+    <div class="stat r"><div class="k">答错</div><div class="v" id="sBad">0</div></div>
+    <div class="stat"><div class="k">正确率</div><div class="v" id="sAcc">--<small>%</small></div></div>
+  </div>
+  <div class="enablebar"><i id="ebar" style="width:100%"></i></div>
+  <div class="tiny" id="enableText">已启用 0 / 0 道 · 停用 0 道 · 从没做过 0 道</div>
+  <div class="warnbox" id="warnAll" style="display:none">已全部停用，系统仍会照常出题。请至少启用一道。</div>
+  <div class="hr"></div>
+  <div class="grid3">
+    <button class="act" id="btnAllOn">全部启用</button>
+    <button class="act danger" id="btnAllOff">全部停用</button>
+    <button class="act" id="btnSmart">停用常对的题</button>
+  </div>
+  <div class="tiny" style="margin-top:9px">停用答过 3 次以上且全对的题。</div>
+</div>
+
+<div class="card">
+  <h2>出题类型 <span class="pill" id="typePill">--</span></h2>
+  <div class="types" id="types">
+    <label data-k="math"><input type="checkbox" data-k="math">数学</label>
+    <label data-k="english"><input type="checkbox" data-k="english">英语</label>
+    <label data-k="pinyin"><input type="checkbox" data-k="pinyin">语文</label>
+    <label data-k="visual"><input type="checkbox" data-k="visual">图形</label>
+  </div>
+  <div class="tiny">勾选参与抽题的类型。「语文」即拼音识字题。</div>
+</div>
+
+<div class="card">
+  <h2>抽题规则 <span class="pill" id="rulePill">--</span></h2>
+  <div class="seg2" id="modes">
+    <button data-mode="wrong_first" class="on">错题优先（默认）</button>
+    <button data-mode="random">完全随机</button>
+  </div>
+  <div class="rulebox" id="ruleText">读取中…</div>
+</div>
+
+<div class="card">
+  <h2>题目列表 <span class="pill gray" id="listPill">0 道</span></h2>
+  <div class="chips" id="subChips"></div>
+  <div class="seg4" id="views">
+    <button data-v="all" class="on">全部</button>
+    <button data-v="wrong">错题<b id="wrongCnt">0</b></button>
+    <button data-v="never">没做过</button>
+    <button data-v="off">已停用</button>
+  </div>
+  <div class="row">
+    <input id="kw" type="search" placeholder="搜题干、选项或题号" autocomplete="off">
+    <select id="sort">
+      <option value="wrong">错得最多</option>
+      <option value="asked">答得最多</option>
+      <option value="acc">正确率最低</option>
+      <option value="never">没做过优先</option>
+      <option value="id">按题号</option>
+    </select>
+  </div>
+  <div class="grid2" style="margin-bottom:4px">
+    <button class="act" id="btnOnFiltered">当前结果全部启用</button>
+    <button class="act" id="btnOffFiltered">当前结果全部停用</button>
+  </div>
+  <div class="tiny" style="margin-bottom:4px">对当前筛选结果批量启用 / 停用。</div>
+  <div id="list"></div>
+  <div class="grid3" style="margin-top:14px">
+    <button class="act primary" id="btnRefresh">刷新</button>
+    <button class="act danger" id="btnClear">清空答题记录</button>
+    <button class="act" id="btnTop">回到顶部</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="/common.js"></script>
+<script>
+var BANK={items:[],subjects:[],total:0,enabled:0,disabled:0,asked:0,wrong:0,never_asked:0};
+var FILTER='all',VIEW='all',SORT='wrong',KEYWORD='';
+var TYPE_KEYS=[['math','数学'],['english','英语'],['pinyin','语文'],['visual','图形']];
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.className='show';setTimeout(function(){t.className=''},1900)}
+function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function pickSummary(it){
+  var p=it.picks||{},arr=[];
+  for(var k in p){if(Object.prototype.hasOwnProperty.call(p,k))arr.push([k,p[k]])}
+  arr.sort(function(a,b){return b[1]-a[1]});
+  return arr.slice(0,2).map(function(x){return esc(x[0])+'×'+x[1]}).join('、');
+}
+function ago(ms){
+  if(!ms)return '';
+  var d=Date.now()-ms;if(d<0)d=0;
+  if(d<60000)return '刚刚';
+  if(d<3600000)return Math.floor(d/60000)+' 分钟前';
+  if(d<86400000)return Math.floor(d/3600000)+' 小时前';
+  var t=new Date(ms);return (t.getMonth()+1)+'/'+t.getDate();
+}
+function titleOf(it){
+  if(it.image&&it.subject==='图形')return '看图选英文：'+(it.answer_text||'');
+  return it.q||'';
+}
+function findItem(id){
+  var a=BANK.items||[];
+  for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];
+  return null;
+}
+function accNum(v){
+  var n=Number(v);
+  return isFinite(n)&&n>=0?n:0;
+}
+function visibleItems(){
+  var out=(BANK.items||[]).filter(function(it){
+    if(FILTER!=='all'&&it.subject!==FILTER)return false;
+    if(VIEW==='wrong'&&!(it.wrong>0))return false;
+    if(VIEW==='never'&&it.asked>0)return false;
+    if(VIEW==='off'&&it.enabled)return false;
+    if(KEYWORD){
+      var s=(it.q+' '+(it.options||[]).join(' ')+' '+it.id+' '+(it.answer_text||'')).toLowerCase();
+      if(s.indexOf(KEYWORD)<0)return false;
+    }
+    return true;
+  });
+  out.sort(function(x,y){
+    if(SORT==='id')return String(x.id).localeCompare(String(y.id));
+    if(SORT==='asked'){
+      var d=(y.asked||0)-(x.asked||0);return d||((y.wrong||0)-(x.wrong||0));
+    }
+    if(SORT==='acc'){
+      var ax=x.asked?accNum(x.accuracy):101, ay=y.asked?accNum(y.accuracy):101;
+      return ax-ay||((y.wrong||0)-(x.wrong||0));
+    }
+    if(SORT==='never'){
+      var n=(x.asked||0)-(y.asked||0);return n||((y.wrong||0)-(x.wrong||0));
+    }
+    return (y.wrong||0)-(x.wrong||0)||((y.asked||0)-(x.asked||0));
+  });
+  return out;
+}
+function updateCounts(){
+  var total=BANK.total||0,on=BANK.enabled||0;
+  document.getElementById('btnAllOn').className=
+    (total>0&&on===total)?'act on-all':'act';
+  document.getElementById('btnAllOff').className=
+    (total>0&&on===0)?'act off-all':'act danger';
+  document.getElementById('sTotal').textContent=total;
+  document.getElementById('sOn').textContent=on;
+  document.getElementById('sAsked').textContent=BANK.asked||0;
+  document.getElementById('sOk').textContent=BANK.correct||0;
+  document.getElementById('sBad').textContent=BANK.wrong||0;
+  document.getElementById('sAcc').innerHTML=accNum(BANK.accuracy)+'<small>%</small>';
+  var bar=document.getElementById('ebar');
+  bar.style.width=(total?Math.round(on*100/total):0)+'%';
+  bar.className=on*2<total?'low':'';
+  document.getElementById('enableText').textContent='已启用 '+on+' / '+total+' 道 · 停用 '+(BANK.disabled||0)+' 道 · 从没做过 '+(BANK.never_asked||0)+' 道';
+  document.getElementById('warnAll').style.display=(total>0&&on===0)?'block':'none';
+  var pp=document.getElementById('poolPill');
+  pp.textContent=on===0?'无可抽题':(on<8?'题量偏少':'抽题正常');
+  pp.className='pill'+(on===0?' red':(on<8?' gray':''));
+}
+function postSettings(obj){
+  return fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)})
+    .then(function(r){return r.json()});
+}
+function renderTypes(){
+  var en=BANK.subjects_enabled||[];
+  TYPE_KEYS.forEach(function(x){
+    var on=en.indexOf(x[0])>=0||(x[0]==='pinyin'&&en.indexOf('chinese')>=0);
+    var box=document.querySelector('#types input[data-k="'+x[0]+'"]');
+    var lab=document.querySelector('#types label[data-k="'+x[0]+'"]');
+    if(box)box.checked=on;
+    if(lab)lab.className=on?'on':'';
+  });
+  var n=(BANK.subjects_enabled||[]).length;
+  document.getElementById('typePill').textContent=n+' 类参与抽题';
+  document.getElementById('typePill').className='pill'+(n?'':' red');
+}
+function saveTypes(){
+  var arr=[];
+  TYPE_KEYS.forEach(function(x){
+    var box=document.querySelector('#types input[data-k="'+x[0]+'"]');
+    if(box&&box.checked)arr.push(x[0]);
+  });
+  if(!arr.length){toast('至少保留一种出题类型');renderTypes();return}
+  BANK.subjects_enabled=arr;
+  renderTypes();
+  postSettings({subjects:arr}).then(function(d){
+    if(!d.ok)throw new Error('failed');
+    toast('出题类型已保存');
+  }).catch(function(){load(true);toast('保存失败，已恢复')});
+}
+function renderRule(){
+  var mode=BANK.pick_mode||'wrong_first';
+  var rp=document.getElementById('rulePill');
+  rp.textContent=mode==='random'?'完全随机':'错题优先';
+  rp.className='pill'+(mode==='random'?' gray':'');
+  [].forEach.call(document.querySelectorAll('#modes button'),function(b){
+    b.className=(b.getAttribute('data-mode')===mode?'on':'');
+  });
+  var t = mode==='random'
+    ? '<b>完全随机</b>：所有启用的题等概率出现。'
+    : '<b>错题优先</b>：没做过的题和常错的题先出现。';
+  document.getElementById('ruleText').innerHTML=t;
+}
+function setMode(mode){
+  BANK.pick_mode=mode;renderRule();
+  postSettings({pick_mode:mode}).then(function(d){
+    if(!d.ok)throw new Error('failed');
+    toast(mode==='random'?'已改为完全随机':'已改为错题优先');
+  }).catch(function(){load(true);toast('保存失败，已恢复')});
+}
+function render(){
+  updateCounts();
+  renderTypes();
+  renderRule();
+  var items=BANK.items||[];
+  document.getElementById('wrongCnt').textContent=items.filter(function(x){return x.wrong>0}).length;
+  // 科目标签
+  var subs=BANK.subjects||[];
+  var h='<button class="'+(FILTER==='all'?'on':'')+'" data-f="all">全部<b>'+items.length+'</b></button>';
+  subs.forEach(function(s){
+    h+='<button class="'+(FILTER===s.subject?'on':'')+'" data-f="'+esc(s.subject)+'">'+esc(s.subject)+'<b>'+s.enabled+'/'+s.total+'</b></button>';
+  });
+  document.getElementById('subChips').innerHTML=h;
+  [].forEach.call(document.querySelectorAll('#views button'),function(b){
+    b.className=(b.getAttribute('data-v')===VIEW?'on':'');
+  });
+  var show=visibleItems();
+  document.getElementById('listPill').textContent=show.length+' 道';
+  if(!show.length){
+    document.getElementById('list').innerHTML='<div class="empty">没有符合条件的题目<br>换个科目或清空搜索词试试</div>';
+    return;
+  }
+  var g='';
+  show.forEach(function(it){
+    var thumb=it.image?('<img class="th" src="/img/'+encodeURIComponent(it.image)+'" alt="">'):'';
+    var opts=(it.options||[]).map(function(o,i){return String.fromCharCode(65+i)+'.'+esc(o)}).join('　');
+    var stat;
+    if(!it.asked){
+      stat='<span class="na">还没做过</span>';
+    }else{
+      stat='答题 <b>'+it.asked+'</b> 次 · 对 <span class="ok">'+it.right+'</span> · 错 <span class="bad">'+it.wrong+'</span> · 正确率 '+accNum(it.accuracy)+'%';
+    }
+    var last=it.last_bad?(' · 最近答错 '+ago(it.last_bad)):'';
+    var ps=VIEW==='wrong'?pickSummary(it):'';
+    if(ps)last+=' · 常错选 <s>'+ps+'</s>';
+    g+='<div class="qi'+(it.enabled?'':' off')+'" data-id="'+esc(it.id)+'">'+
+       '<div class="sw"><label><input type="checkbox" data-id="'+esc(it.id)+'"'+(it.enabled?' checked':'')+'><i></i></label>'+
+       '<span>'+(it.enabled?'出题':'停用')+'</span></div>'+
+       '<div class="qb">'+
+       '<div class="qt"><span class="num">'+esc(it.id)+'</span>'+thumb+'<span class="tag">'+esc(it.subject)+'</span>'+esc(titleOf(it))+'</div>'+
+       '<div class="opts">'+opts+' · 正确 <b>'+esc(it.answer_text||'')+'</b></div>'+
+       '<div class="mm">'+stat+last+'</div>'+
+       '</div></div>';
+  });
+  document.getElementById('list').innerHTML=g;
+}
+function post(payload,okMsg){
+  return fetch('/api/question_enabled',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){return r.json()}).then(function(d){
+      if(!d.ok)throw new Error('failed');
+      if(d.enabled!==undefined){
+        BANK.enabled=d.enabled;
+        BANK.disabled=(BANK.total||0)-d.enabled;
+        updateCounts();
+      }
+      if(okMsg)toast(okMsg+(d.changed?'（变更 '+d.changed+' 道）':''));
+      return d;
+    });
+}
+function setIds(ids,on){
+  if(!ids.length){toast('没有可操作的题目');return}
+  var before=ids.map(function(id){var it=findItem(id);return it?it.enabled:null});
+  var delta=0;
+  ids.forEach(function(id){
+    var it=findItem(id);
+    if(it&&it.enabled!==on){it.enabled=on;delta++}
+  });
+  BANK.enabled=(BANK.enabled||0)+(on?delta:-delta);
+  BANK.disabled=(BANK.total||0)-BANK.enabled;
+  render();
+  post({ids:ids,enabled:on},on?'已启用':'已停用').catch(function(){
+    ids.forEach(function(id,i){var it=findItem(id);if(it&&before[i]!==null)it.enabled=before[i]});
+    BANK.enabled=(BANK.enabled||0)-(on?delta:-delta);
+    BANK.disabled=(BANK.total||0)-BANK.enabled;
+    render();toast('保存失败，请重试');
+  });
+}
+function load(silent){
+  return fetch('/api/questionbank').then(function(r){return r.json()}).then(function(d){
+    if(!d||!d.ok)throw new Error('bad data');
+    BANK=d;
+    render();
+    if(!silent)toast('题库已刷新');
+  }).catch(function(){
+    if(!silent)toast('读取题库失败');
+  });
+}
+document.getElementById('subChips').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button[data-f]'):null;
+  if(b){FILTER=b.getAttribute('data-f');render()}
+});
+document.getElementById('views').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button[data-v]'):null;
+  if(b){VIEW=b.getAttribute('data-v');render()}
+});
+document.getElementById('btnClear').onclick=function(){
+  if(!confirm('清空全部答题记录？题库勾选不变。'))return;
+  fetch('/api/wrongbook_clear',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){return r.json()}).then(function(){toast('已清空');load(true)})
+    .catch(function(){toast('清空失败')});
+};
+document.getElementById('types').addEventListener('change',function(e){
+  if(e.target&&e.target.type==='checkbox')saveTypes();
+});
+document.getElementById('modes').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button[data-mode]'):null;
+  if(b)setMode(b.getAttribute('data-mode'));
+});
+// 事件委托：checkbox 在 render 里被反复重建，委托到列表容器才不会失效。
+document.getElementById('list').addEventListener('change',function(e){
+  var t=e.target;
+  if(t&&t.type==='checkbox'&&t.getAttribute('data-id')){
+    setIds([t.getAttribute('data-id')],t.checked);
+  }
+});
+document.getElementById('sort').onchange=function(){SORT=this.value;render()};
+document.getElementById('kw').addEventListener('input',function(){KEYWORD=this.value.trim().toLowerCase();render()});
+document.getElementById('btnAllOn').onclick=function(){post({all:true,enabled:true},'已全部启用').then(function(){load(true)})};
+document.getElementById('btnAllOff').onclick=function(){
+  if(!confirm('确定停用全部题目？\n停用后系统仍会照常随机出题，建议至少保留几道。'))return;
+  post({all:true,enabled:false},'已全部停用').then(function(){load(true)});
+};
+document.getElementById('btnSmart').onclick=function(){
+  if(!confirm('把答过 3 次以上、一次都没答错的题停用？\n宝宝常做对的简单题以后就不再抽到了。'))return;
+  post({smart:true},'已精简题库').then(function(d){load(true);if(!d.changed)toast('暂时没有符合条件的常对题')});
+};
+document.getElementById('btnOnFiltered').onclick=function(){setIds(visibleItems().map(function(x){return x.id}),true)};
+document.getElementById('btnOffFiltered').onclick=function(){setIds(visibleItems().map(function(x){return x.id}),false)};
+document.getElementById('btnRefresh').onclick=function(){load(false)};
+document.getElementById('btnTop').onclick=function(){try{window.scrollTo(0,0)}catch(e){}};
+TVCTL.init();
+(function(){var m=(location.search||'').match(/[?&]view=(wrong|never|off)/);if(m)VIEW=m[1]})();
+load(true);
+setInterval(function(){if(!document.hidden)load(true)},60000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)load(true)});
+</script>
+</body>
+</html>
