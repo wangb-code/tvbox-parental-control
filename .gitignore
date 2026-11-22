@@ -29,3 +29,4 @@ __pycache__/
 # ===== 编辑器/系统 =====
 .DS_Store
 Thumbs.db
+upload_via_api.py
